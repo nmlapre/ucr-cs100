@@ -1,45 +1,20 @@
 Customizing .bashrc for Fun and Profit
 =====================
 
-> <em>"when you don't create things, you become defined by your tastes rather than ability. your tastes only narrow & exclude people. so create."</em>
+<h2>Introduction</h2>
 
-> <em>_why</em>
+<code>.bashrc</code> refers to the file that allows customization of [Bash](http://en.wikipedia.org/wiki/Bash_%28Unix_shell%29), located at <code>~/.bashrc</code>. Bash, as you may know, is a powerful tool. Customizing <code>.bashrc</code> will allow you to be a more efficient programmer in the Unix environment, since you can easily create and modify your own custom commands, variables, and functions to your taste.
 
----
-<h2>Why</h2>
+As it is important for a carpenter or blacksmith or accountant or meat butcher to know and, importantly, be comfortable with, her tools, so is it important for a hacker to know hers. This guide will explore the path and the goal in customizing a bash profile via the bash configuration file, located at <code>~/.bashrc</code>, in order to create not just a workable, but enjoyable programming environment.
 
-Bash is a powerful tool. When I began using it, it seemed like a great dark chasm of unfamiliar abbreviations, with little to say but for the menacing flicker of a prompt.
+<h2>Preliminary Information</h2>
 
-> <em> "WHAT DO YOU WANT FROM ME?!" He shouted one more into the void. This time, the void spoke with a didactic, booming voice. </em>
-
->  <em>"WHAT: command not found." </em>
-
->  <em> He resolved to try again tomorrow. </em>
-
-But, with time it became clear. The void was not a thing to fear, but a great friend and asset. After enough time spent working with Bash, the mouse became foreign, an aging friend of faded glory. Before long, Bash and I were doing everything together. It felt good. It felt right.
-
-> <em> "You know, you're the quiet type." He mentioned one day. </em>
-
->  <em> ... </em>
-
->  <em> He thought for a moment. "You know, you're the quiet type -v". </em>
-
->  <em> "You know what, you're right? By the way, how was your day today? The current time is 2:51 PM. You ar..." </em>
-
-As it is important for a carpenter or blacksmith or accountant or meat butcher to know her tools, so is it important for a hacker to know hers. This guide will explore the path and the goal in customizing a bash profile via the bash configuration file, located at <code>~/.bashrc</code>, in order to create not just a workable, but liveable programming environment.
-
-<h2>Beginning</h2>
-
-<code>~/.bashrc</code> is written in the bash syntax. This lanugage is very powerful, and is full of simple tools that will allow you to complete complex tasks succinctly. In the language, we find there are some constructs that will be useful to you in understanding and, more importantly, creating your own useful tools in Bash. 
-
-> <em> During meditation, he opened his eyes suddenly. "I wish I could save things so that I could access them later." </em>
-
->  <em> The voice spoke. "Variables are the way." </em>
+Before we delve into the possibilities, we should go over some basics of what we can user in `.bashrc` to create the file that we want. <code>~/.bashrc</code> is written in the bash syntax. This lanugage is very powerful, and is full of simple tools that will allow you to express complex commands succinctly. In the language, we find there are some constructs that will be useful to you in understanding and, more importantly, creating your own useful tools in Bash. Note that the `#` characters denotes the comment symbol. Everything after a `#` will be ignored when entered as a command. They are used in the
 
     okra='wogmalumpa'         # define a delicious variable
     echo ${okra}              # prints "wogmalumpa" to stdout, $okra also valid
 
-In the terminal, once <code>okra</code> is defined in <code>.bashrc</code>, one can check its existence by simply asking Bash this question:
+In the terminal, once <code>okra</code> is defined in <code>.bashrc</code>, one can check its value by typing the following into the terminal (the <code>$</code> denotes the prompt, don't type that).
 
     $ echo ${okra}              # prints "wogmalumpa"
 
@@ -61,35 +36,40 @@ On startup, Bash will take you directly to the directory you specify in <code>ta
 
 <h4>Particularly: </h4>
 
->  <em> Atop a windswept mountain summit, he saw that his interactions with Bash were relics of his less experienced years. He decided to simplify, simplify. </em>
+$PS1 is a Bash variable that contains the string that will be printed as the prompt each time Bash awaits a command from the user. It can be customized with some certain escape characters. They are decoded in a special way. Here, we see the use of <code>\u</code>, <code>\h</code>, and <code>\w</code>.
 
->  <em> His companion radiated a positive energy. His karma expanded. </em>
+    me@computer:/home/ $ # here, PS1 = "\u@\h:\w", that is, user@hostname:current/working/directory  
+    me@computer:/home/ $ PS1="\u $ "
+    me $  # The prompt prints even less information.
+    me $ PS1="$ "
+    $   # a very minimal example
+    
+    
+Also useful may be:
 
-
-    user@computer:/home/ $ # the cluttered prompt coulds my mind  
-    user@computer:/home/ $ PS1="\u $ "
-    user $ # I approach the truth.
-    $ # I breathe freely.
+Escape Sequence | Meaning 
+--- | --- 
+`\n` | newline 
+`\T` | current time (12hr format) 
+`\#` | command number of this command 
+`\\` | a backslash! 
 
 <h2>Alias</h2>
 
->  <em> Before the vast ocean, he sat, surrounded by *nix energy. He watched the waves unendingly splash the rocks, wearing them down finely. He saw that his hands too were worn from repetition. </em>
-
->  <em> The energy pulsated about him. He realized that his karma expanded as he felt the words around him... </em>
-
->  <em> ...alias... </em>
-
-
 After some experience with the shell, you might find yourself tiring of typing cumbersome command strings over and over. Aliases will save you from this pain. In <code>.bashrc</code>, consider adding lines such as these:
 
-    alias ll='ls -alF'                          # long-listing
+    alias ll='ls -alF'                          # long-listing format for ls
+    
     alias c='clear'                             # useful, common
+    
     alias ..='cd ..'
     alias ...='cd ../../../'
     alias ....='cd ../../../../'                # and so on
     alias meminfof='free -mlt'                  # memory information
+    
     # print subdirectories in a tree visualization
     alias tree="ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/   /' -e 's/-/|/'"
+    
     # create a random password
     alias genpasswd="strings /dev/urandom | grep -o '[[:alnum:]]' | head -n 30 | tr -d '\n'; echo"
 
