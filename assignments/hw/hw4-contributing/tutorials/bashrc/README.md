@@ -32,7 +32,7 @@ To always go to your home directory on Bash startup, add the following code:
     take_me_home() { cd /your/preferred/path; }
     take_me_home
 
-On startup, Bash will take you directly to the directory you specify in <code>take_me_home()</code>. However, home is not the only useful variable.
+`take_me_home()` is a function. Functions in this lanuage are similar to those in programming languages you may have used before already, such as C or Java. After defining the function, you can call it wherever you like within the file simply by invoking its title, as above. In this particular instance, Bash will, on startup, take you directly to the directory you specify in <code>take_me_home()</code>. However, `HOME` is not the only useful variable.
 
 <h4>Particularly: </h4>
 
@@ -128,4 +128,15 @@ These colors can be similarly used on the command line, or in any scripts you ma
 
 <h2>Git Branch Prompt Information</h2>
 
-stay tuned...
+If you are familiar with the `hammer` server within UCR's CS department, you may have noticed that the prompt behaves a certain way when inside of a git repository, by displaying the current branch information. It turns out that doing that is actually fairly simple, and can even be expanded to be slightly cooler! Consider the following additions to `.bashrc`:
+
+    # print the branch name for git
+    function git_branch_pun_intended {
+        __git_ps1 "${1:-(%s) }"; return;
+    }
+    
+    # Add the branch to PS1
+    export GIT_PS1_SHOWDIRTYSTATE=yes
+    export PS1="\$(git_branch_pun_intended)${PS1}";
+    
+The function definition simply gets the name of the branch and formats it slightly, such that it lies flush with the terminal window edge. The next segment sets a variable called `GIT_PS1_SHOWDIRTYSTATE` which appends a `*` to the branch name if there are changes in the repository, and a `+` to the branch name if there are additions staged and ready for commit within the repository. This works for all folders and subfolders in any git repository. Note: If you happen to work with other version control systems, such as Mercurial, Subversion, or Bazaar, check out [this](http://blog.grahampoulter.com/2011/09/show-current-git-bazaar-or-mercurial.html) guide to get the same effect.
